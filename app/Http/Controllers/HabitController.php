@@ -30,8 +30,10 @@ class HabitController extends Controller
         return response()->json($habit, 201);
     }
     
-    public function update(Request $request, Habit $habit)
+    public function update(Request $request)
     {
+        $habit = Habit::where('id', $request->id)->where('user_id', auth()->id())->firstOrFail();
+
         $request->validate([
             'name' => 'sometimes|string|max:255',
             'time_of_day' => 'sometimes|in:morning,evening',
@@ -41,7 +43,7 @@ class HabitController extends Controller
     
         $habit->update($request->only(['name', 'time_of_day', 'description', 'completed']));
     
-        return response()->json($habit);
+        return response()->json(['message' => 'Habit updated successfully', 'habit' => $habit]);
     }
     
     public function destroy(Habit $habit)

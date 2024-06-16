@@ -36,12 +36,20 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return response()->json(['message' => 'Logged in successfully']);
-        }
+        $user = User::where('email', $request->email)->first();
 
-        return response()->json(['error' => 'The provided credentials do not match our records.'], 401);
+        if(Auth::attempt($credentials)) {
+            $token = $user->createToken('token-name')->plainTextToken;
+
+            return response()->json([
+                'message' => 'Logged in successfully',
+                'user'=>$user->name,
+                'token' => $token,
+            ],200);  
+        }else{
+            return response()->json(['error' => 'The provided credentials do not match our records.'], 401);
+        }
+        
     }
 
 }
