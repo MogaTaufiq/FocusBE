@@ -30,24 +30,31 @@ class HabitController extends Controller
         return response()->json($habit, 201);
     }
     
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $habit = Habit::where('id', $request->id)->where('user_id', auth()->id())->firstOrFail();
+        $habit = Habit::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
 
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'sometimes|string|max:255',
             'time_of_day' => 'sometimes|in:morning,evening',
             'description' => 'nullable|string',
-            'completed' => 'sometimes|boolean'
+            'completed' => 'sometimes|boolean',
         ]);
-    
-        $habit->update($request->only(['name', 'time_of_day', 'description', 'completed']));
-    
+
+        $habit->name = $validatedData['name'] ?? $habit->name;
+        $habit->time_of_day = $validatedData['time_of_day'] ?? $habit->time_of_day;
+        $habit->description = $validatedData['description'] ?? $habit->description;
+        $habit->completed = $validatedData['completed'] ?? $habit->completed;
+
+        $habit->save();
+
         return response()->json(['message' => 'Habit updated successfully', 'habit' => $habit]);
     }
+
     
-    public function destroy(Habit $habit)
+    public function destroy($id)
     {
+        $habit = Habit::where('id',$id)->where('user_id', auth()->id())->firstOrFail();
         $habit->delete();
         return response()->json(['message' => 'Habit deleted']);
     }

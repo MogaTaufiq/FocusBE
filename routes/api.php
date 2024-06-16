@@ -10,7 +10,7 @@ use App\Http\Controllers\EventController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/habits', [HabitController::class, 'index']);
     Route::post('/habits', [HabitController::class, 'store']);
-    Route::post('/update/habits', [HabitController::class, 'update']);
+    Route::put('/habits/{id}', [HabitController::class, 'update']);
     Route::delete('/habits/{id_habit}', [HabitController::class, 'destroy']);
 });
 
