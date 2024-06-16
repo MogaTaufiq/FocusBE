@@ -23,3 +23,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/todos/{todo}', [ToDoController::class, 'update']);
     Route::delete('/todos/{todo}', [ToDoController::class, 'destroy']);
 });
+Route::apiResource('events', EventController::class);
