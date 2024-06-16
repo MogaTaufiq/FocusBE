@@ -50,4 +50,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Habit::class);
     }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    public function todos()
+    {
+        return $this->hasMany(Todo::class);
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
 }

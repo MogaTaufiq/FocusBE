@@ -30,21 +30,28 @@ class NoteController extends Controller
         return response()->json($note, 201);
     }
     
-    public function update(Request $request, Note $note)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        $note = Note::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+
+        $validatedData = $request->validate([
             'title' => 'sometimes|string|max:255',
             'content' => 'sometimes|string',
             'pinned' => 'sometimes|boolean'
         ]);
     
-        $note->update($request->only(['title', 'content', 'pinned']));
-    
-        return response()->json($note);
+        $note->title = $validatedData['title'] ?? $note->title;
+        $note->content = $validatedData['content'] ?? $note->content;
+        $note->pinned = $validatedData['pinned'] ?? $note->pinned;
+
+        $note->save();
+
+        return response()->json(['message' => 'Note updated successfully', 'note' => $note]);
     }
     
-    public function destroy(Note $note)
+    public function destroy($id)
     {
+        $note = Note::where('id',$id)->where('user_id', auth()->id())->firstOrFail();
         $note->delete();
         return response()->json(['message' => 'Note deleted']);
     }

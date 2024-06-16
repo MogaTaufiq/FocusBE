@@ -20,15 +20,23 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notes', [NoteController::class, 'index']);
     Route::post('/notes', [NoteController::class, 'store']);
-    Route::put('/notes/{note}', [NoteController::class, 'update']);
-    Route::delete('/notes/{note}', [NoteController::class, 'destroy']);
+    Route::put('/notes/{id}', [NoteController::class, 'update']);
+    Route::delete('/notes/{id_note}', [NoteController::class, 'destroy']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/todos', [ToDoController::class, 'index']);
     Route::post('/todos', [ToDoController::class, 'store']);
-    Route::put('/todos/{todo}', [ToDoController::class, 'update']);
-    Route::delete('/todos/{todo}', [ToDoController::class, 'destroy']);
+    Route::put('/todos/{id}', [ToDoController::class, 'update']);
+    Route::delete('/todos/{id_todo}', [ToDoController::class, 'destroy']);
 });
 
-Route::apiResource('events', EventController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/events', [EventController::class, 'index']);
+    Route::post('/events', [EventController::class, 'store']);
+    Route::get('/events/{id}', [EventController::class, 'show']);
+    Route::put('/events/{id}', [EventController::class, 'update']);
+    Route::delete('/events/{id_event}', [EventController::class, 'destroy']);
+});
+
+// Route::apiResource('events', EventController::class);

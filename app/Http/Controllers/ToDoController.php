@@ -28,21 +28,28 @@ class ToDoController extends Controller
         return response()->json($todo, 201);
     }
     
-    public function update(Request $request, ToDo $todo)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        $todo = Todo::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+
+        $validatedData = $request->validate([
             'title' => 'sometimes|string|max:255',
             'deadline' => 'nullable|date',
             'completed' => 'sometimes|boolean'
         ]);
     
-        $todo->update($request->only(['title', 'deadline', 'completed']));
-    
-        return response()->json($todo);
+        $todo->title = $validatedData['title'] ?? $todo->title;
+        $todo->deadline = $validatedData['deadline'] ?? $todo->deadline;
+        $todo->completed = $validatedData['completed'] ?? $todo->completed;
+
+        $todo->save();
+
+        return response()->json(['message' => 'Todo updated successfully', 'todo' => $todo]);
     }
     
-    public function destroy(ToDo $todo)
+    public function destroy($id)
     {
+        $todo = Todo::where('id',$id)->where('user_id', auth()->id())->firstOrFail();
         $todo->delete();
         return response()->json(['message' => 'ToDo deleted']);
     }
