@@ -16,7 +16,7 @@ class HabitController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'time_of_day' => 'required|in:morning,evening',
             'monday' => 'required|boolean',
             'tuesday' => 'required|boolean',
             'wednesday' => 'required|boolean',
@@ -28,7 +28,7 @@ class HabitController extends Controller
 
         $habit = $request->user()->habits()->create([
             'name' => $request->name,
-            'description' => $request->description,
+            'time_of_day' => $request->time_of_day,
             'monday' => $request->monday,
             'tuesday' => $request->tuesday,
             'wednesday' => $request->wednesday,
@@ -47,6 +47,7 @@ class HabitController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'sometimes|string|max:255',
+            'time_of_day' => 'sometimes|in:morning,evening',
             'monday' => 'sometimes|boolean',
             'tuesday' => 'sometimes|boolean',
             'wednesday' => 'sometimes|boolean',
@@ -54,10 +55,10 @@ class HabitController extends Controller
             'friday' => 'sometimes|boolean',
             'saturday' => 'sometimes|boolean',
             'sunday' => 'sometimes|boolean',
-            'completed' => 'sometimes|boolean',
         ]);
 
         $habit->name = $validatedData['name'] ?? $habit->name;
+        $habit->time_of_day = $validatedData['time_of_day'] ?? $habit->time_of_day;
         $habit->monday = $validatedData['monday'] ?? $habit->monday;
         $habit->tuesday = $validatedData['tuesday'] ?? $habit->tuesday;
         $habit->wednesday = $validatedData['wednesday'] ?? $habit->wednesday;
@@ -65,7 +66,6 @@ class HabitController extends Controller
         $habit->friday = $validatedData['friday'] ?? $habit->friday;
         $habit->saturday = $validatedData['saturday'] ?? $habit->saturday;
         $habit->sunday = $validatedData['sunday'] ?? $habit->sunday;
-        $habit->completed = $validatedData['completed'] ?? $habit->completed;
 
         $habit->save();
 

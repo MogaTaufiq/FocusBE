@@ -13,7 +13,7 @@ class Habit extends Model
 
     protected $fillable = [
         'name',
-        'description',
+        'time_of_day',
         'monday',
         'tuesday',
         'wednesday',
