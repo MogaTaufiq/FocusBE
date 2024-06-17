@@ -37,6 +37,7 @@ class HabitController extends Controller
             'saturday' => $request->saturday,
             'sunday' => $request->sunday,
         ]);
+    
 
         return response()->json($habit, 201);
     }

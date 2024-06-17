@@ -16,8 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id'); // Relasi ke tabel users
             $table->string('name');
             $table->string('time_of_day'); // 'morning' atau 'evening'
-            $table->text('description')->nullable();
-            $table->boolean('completed')->default(false);
+            $table->boolean('monday')->default(false);
+            $table->boolean('tuesday')->default(false);
+            $table->boolean('wednesday')->default(false);
+            $table->boolean('thursday')->default(false);
+            $table->boolean('friday')->default(false);
+            $table->boolean('saturday')->default(false);
+            $table->boolean('sunday')->default(false);
             $table->timestamps();
         
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
