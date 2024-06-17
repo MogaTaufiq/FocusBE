@@ -29,6 +29,7 @@ class DashboardController extends Controller
             ->count();
 
         return response()->json([
+            'userName' => $user->name,
             'upcomingEventsCount' => $upcomingEventsCount,
             'toDoCount' => $toDoCount,
             'habitsLeftCount' => $habitsLeftCount,
