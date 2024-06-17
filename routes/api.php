@@ -6,7 +6,16 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ToDoController;
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
+});
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+});
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/habits', [HabitController::class, 'index']);
     Route::post('/habits', [HabitController::class, 'store']);
