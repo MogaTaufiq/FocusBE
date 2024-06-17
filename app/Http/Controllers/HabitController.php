@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -17,16 +16,28 @@ class HabitController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'time_of_day' => 'required|in:morning,evening',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'monday' => 'required|boolean',
+            'tuesday' => 'required|boolean',
+            'wednesday' => 'required|boolean',
+            'thursday' => 'required|boolean',
+            'friday' => 'required|boolean',
+            'saturday' => 'required|boolean',
+            'sunday' => 'required|boolean',
         ]);
-    
+
         $habit = $request->user()->habits()->create([
             'name' => $request->name,
-            'time_of_day' => $request->time_of_day,
-            'description' => $request->description
+            'description' => $request->description,
+            'monday' => $request->monday,
+            'tuesday' => $request->tuesday,
+            'wednesday' => $request->wednesday,
+            'thursday' => $request->thursday,
+            'friday' => $request->friday,
+            'saturday' => $request->saturday,
+            'sunday' => $request->sunday,
         ]);
-    
+
         return response()->json($habit, 201);
     }
     
@@ -36,14 +47,24 @@ class HabitController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'sometimes|string|max:255',
-            'time_of_day' => 'sometimes|in:morning,evening',
-            'description' => 'nullable|string',
+            'monday' => 'sometimes|boolean',
+            'tuesday' => 'sometimes|boolean',
+            'wednesday' => 'sometimes|boolean',
+            'thursday' => 'sometimes|boolean',
+            'friday' => 'sometimes|boolean',
+            'saturday' => 'sometimes|boolean',
+            'sunday' => 'sometimes|boolean',
             'completed' => 'sometimes|boolean',
         ]);
 
         $habit->name = $validatedData['name'] ?? $habit->name;
-        $habit->time_of_day = $validatedData['time_of_day'] ?? $habit->time_of_day;
-        $habit->description = $validatedData['description'] ?? $habit->description;
+        $habit->monday = $validatedData['monday'] ?? $habit->monday;
+        $habit->tuesday = $validatedData['tuesday'] ?? $habit->tuesday;
+        $habit->wednesday = $validatedData['wednesday'] ?? $habit->wednesday;
+        $habit->thursday = $validatedData['thursday'] ?? $habit->thursday;
+        $habit->friday = $validatedData['friday'] ?? $habit->friday;
+        $habit->saturday = $validatedData['saturday'] ?? $habit->saturday;
+        $habit->sunday = $validatedData['sunday'] ?? $habit->sunday;
         $habit->completed = $validatedData['completed'] ?? $habit->completed;
 
         $habit->save();
@@ -51,7 +72,6 @@ class HabitController extends Controller
         return response()->json(['message' => 'Habit updated successfully', 'habit' => $habit]);
     }
 
-    
     public function destroy($id)
     {
         $habit = Habit::where('id',$id)->where('user_id', auth()->id())->firstOrFail();

@@ -12,11 +12,16 @@ class Habit extends Model
     protected $table = 'habits';
 
     protected $fillable = [
-        'user_id',
         'name',
-        'time_of_day',
         'description',
-        'completed'
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+        'user_id',
     ];
 
     public function user()
